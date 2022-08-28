@@ -21,7 +21,7 @@ const difficulties = [
   },
   {
     id: 'vhard',
-    name: 'Очент высокая',
+    name: 'Очень высокая',
     filter: ['easy', 'normal']
   },
 ]

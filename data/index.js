@@ -37,19 +37,21 @@ let deckInfo = {
   cardList:[
     [],[],[]
   ],
-  chosenAncient: 0,
+  chosenAncient: null,
   setAncient(ancientNum){
     this.chosenAncient = ancientNum;
     this.setCardCount(ancientsData[this.chosenAncient]);
   },
   setCardCount(ancientInfo) {
-    this.cardCount.forEach((cC,cCIndex)=>{
-      this.cardColor.forEach(cL => {
-        cC[cL] = ancientInfo[this.levelName[cCIndex]][cL]
+    if(this.chosenAncient != null){
+      this.cardCount.forEach((cC,cCIndex)=>{
+        this.cardColor.forEach(cL => {
+          cC[cL] = ancientInfo[this.levelName[cCIndex]][cL]
+        })
       })
-    })
-    stageList(this.cardCount)
-    this.shuffleDeck()
+      stageList(this.cardCount)
+      this.shuffleDeck()
+    }
   },
 
   exception: ['',''],
@@ -76,10 +78,9 @@ let deckInfo = {
       this.cardColor.forEach(cL =>{
         let pickCardCount = cC[cL];
         let counter = 0;
-        let num = 0;
 
         while(counter < pickCardCount) {
-          num = Math.floor(Math.random() * filteredCards[cL].length)
+          let num = Math.floor(Math.random() * filteredCards[cL].length)
           let onlyExLeft = filteredCards[cL].every(elem=>elem.difficulty == this.exception[1]);
           if (filteredCards[cL][num].difficulty != this.exception[1] || onlyExLeft){
             this.cardList[cCIndex].push(filteredCards[cL][num].id);
@@ -106,6 +107,7 @@ let deckInfo = {
       deckFliper.classList.remove('active');
     }
     stageList(this.cardCount);
+    
   }
 };
 
@@ -186,8 +188,7 @@ function stageList(ancientInfo){
 function cardReveal(){
   let flipedImage = document.querySelector('.dec_revealed img');
   let currentLevel = deckInfo.currentLevel;
-  let imagesOnLevel = deckInfo.cardList[currentLevel].length;
-  let rngCard = Math.floor(Math.random() * imagesOnLevel)
+  let rngCard = Math.floor(Math.random() * deckInfo.cardList[currentLevel].length)
   let cardId = deckInfo.cardList[currentLevel][rngCard];
   let cardColor = cardId.replace(/[0-9]/g, '')+'Cards';
   let currentCard = Cards[cardColor].find(e => {return e.id == cardId})
